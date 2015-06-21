@@ -3,8 +3,7 @@ L = 2;
 M = 100;
 K = 100;
 SNRdB = 0;
-numCases = 500;
-T = 2;
+numCases = 100;
 
 SNR = 10^(SNRdB / 10);
 N0 = 1 / SNR;
@@ -13,23 +12,16 @@ BSs = zeros(L, 1);
 r = 2;
 if L == 1
     BSs = 0;
-    F = 0;
-    ratio = 1;
 elseif L == 2
     BSs = [0, r * 1j];
-    F = [1, 2] - 1;
-    ratio = 2;
 elseif L == 3
     BSs = [0, r * 1j, r * cos(pi / 6) + r * sin(pi / 6) * 1j];
-    F = [1, 2, 3] - 1;
-    ratio = 3;
 elseif L == 4
     BSs = [0, ...
                 r * 1j, ...
                 r * cos(pi / 6) + r * sin(pi / 6) * 1j, ...
                 -r * cos(pi / 6) + r * sin(pi / 6) * 1j];
-    F = [1, 2, 3, 4] - 1;
-    ratio = 4;
+    F = [1, 2, 3, 3];
 elseif L == 7
     BSs = [0, ...
                 r * 1j, ...
@@ -38,15 +30,13 @@ elseif L == 7
                 r * cos(pi / 6) + r * (sin(pi / 6) - 1) * 1j, ...
                 -r * 1j, ...
                 -r * cos(pi / 6) + r * (sin(pi / 6) - 1) * 1j];
-    %F = [1, 2, 3, 3, 2, 3, 2] - 1;
-    F = [1 : 7] - 1;
-    ratio = 7;
-elseif L == 19
-    BSs = [0, r * 1j, r * cos(pi / 6) + r * sin(pi / 6) * 1j, -r * cos(pi / 6) + r * sin(pi / 6) * 1j, r * cos(pi / 6) + r * (sin(pi / 6) - 1) * 1j, ...
-                -r * 1j, -r * cos(pi / 6) + r * (sin(pi / 6) - 1) * 1j];
+    F = [1, 2, 3, 3, 2, 3, 2];
 end
 
-err = 0;
+berr = 0;
+serr = 0;
+xerrs = [];
+xmats = [];
 
 for ci = 1 : numCases
     UEs = brownian(L, K, BSs, r / sqrt(3));
@@ -59,13 +49,23 @@ for ci = 1 : numCases
 
     %xhat = pinv(H) * y;
     %xhat = H' / (H * H' + N0 * eye(M)) * y;
-    %xhat = iterative_cancellation(L, M, K, H, y, N0, 0);
+    [xhat, Cx, xq] = iterative_cancellation_quantize(L, M, K, H, y, N0, 1);
+    for xi = 1 : length(xhat)
+        if xq(xi) ~= x(xi)
+            xerrs = [xerrs; xhat(xi)];
+        else
+            xmats = [xmats; xhat(xi)];
+        end
+    end
 
-    A = pilot_assignment_reuse(L, M, K, R, N0, F, ratio);
-    [Hhat, C] = channel_estimate_reuse(L, M, K, H, R, A, N0, ratio);
-    Hhat = H; C = zeros(size(C));
-    xhat = iterative_cancellation_imperfect(L, M, K, Hhat, C, y, N0, T, 'mmse');
-    err = err + sum(real(x) .* real(xhat) < 0) + sum(imag(x) .* imag(xhat) < 0);
+    %[A, cost, main, cros] = pilot_assignment(L, M, K, R, N0);
+    %[Hhat, C] = channel_estimate(L, M, K, H, R, A, N0);
+    %xhat = iterative_cancellation_imperfect(L, M, K, Hhat, C, y, N0, 2);
+    berr = berr + sum(real(x) .* real(xhat) < 0) + sum(imag(x) .* imag(xhat) < 0);
+    serr = serr + sum(x ~= xq);
 end
 
-fprintf(2, 'BER is %e, with %d errors\n', err / numCases / L / K / 2, err);
+fprintf(2, 'BER is %e, with %d errors\n', berr / numCases / L / K / 2, berr);
+fprintf(2, 'SER is %e, with %d errors\n', serr / numCases / L / K, serr);
+
+plot(real(xmats), imag(xmats), '.', real(xerrs), imag(xerrs), 'x'); axis([-1.5 1.5 -1.5 1.5]); grid on;

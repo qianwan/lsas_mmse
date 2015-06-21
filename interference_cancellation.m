@@ -1,9 +1,9 @@
 clear;
 L = 2;
-M = 70;
-K = 50;
-SNRdB = 4;
-numCases = 200;
+M = 100;
+K = 100;
+SNRdB = 0;
+numCases = 1000;
 
 SNR = 10^(SNRdB / 10);
 N0 = 1 / SNR;
@@ -46,11 +46,11 @@ for ci = 1 : numCases
 
     %xhat = pinv(H) * y;
     %xhat = H' / (H * H' + N0 * eye(M)) * y;
-    %xhat = iterative_cancellation(L, M, K, H, y, N0, 0);
+    xhat = iterative_cancellation(L, M, K, H, y, N0, 1);
 
-    [A, cost, main, cros] = pilot_assignment(L, M, K, R, N0);
-    [Hhat, C] = channel_estimate(L, M, K, H, R, A, N0);
-    xhat = iterative_cancellation_imperfect(L, M, K, Hhat, C, y, N0, 2);
+    %[A, cost, main, cros] = pilot_assignment(L, M, K, R, N0);
+    %[Hhat, C] = channel_estimate(L, M, K, H, R, A, N0);
+    %xhat = iterative_cancellation_imperfect(L, M, K, Hhat, C, y, N0, 2);
     err = err + sum(real(x) .* real(xhat) < 0) + sum(imag(x) .* imag(xhat) < 0);
 end
 

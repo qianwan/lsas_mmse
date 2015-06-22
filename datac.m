@@ -20,19 +20,21 @@ mmselimit = [5.0e-2, 3.1e-2, 1.7e-2, 8.7e-3, 3.9e-3, 1.6e-3, 5.6e-4, 1.7e-4];
 zflimit   = [0.38, 0.359, 0.332, 0.298, 0.252, 0.206, 0.165, 0.139];
 % L = 2, M = K = 100, perfect channel estimation
 %cell2Iter0Perf   = [6.61e-2, 4.99e-2, 3.63e-2, 2.75e-2, 2.13e-2, 1.71e-2, 1.44e-2, 1.33e-2];
-cell2Iter0Perf   = [8.12e-2, 6.85e-2, 5.91e-2, 5.80e-2, 6.10e-2, 6.77e-2, 8.16e-2, 9.78e-2];
-cell2Iter1Perf   = [5.71e-2, 3.73e-2, 2.30e-2, 1.38e-2, 7.58e-3, 4.38e-3, 2.44e-3, 1.41e-3];
-cell2Iter2Perf   = [5.67e-2, 3.82e-2, 2.28e-2, 1.31e-2, 7.03e-3, 3.55e-3, 1.71e-3, 8.49e-4];
+cell2Iter0Perf     = [8.12e-2, 6.85e-2, 5.91e-2, 5.80e-2, 6.10e-2, 6.77e-2, 8.16e-2, 9.78e-2];
+cell2Iter1Perf     = [5.71e-2, 3.73e-2, 2.30e-2, 1.38e-2, 7.58e-3, 4.38e-3, 2.44e-3, 1.41e-3];
+cell2Iter2Perf     = [5.67e-2, 3.82e-2, 2.28e-2, 1.31e-2, 7.03e-3, 3.55e-3, 1.71e-3, 8.49e-4];
+cell2Iter2HardPerf = [5.51e-2, 3.61e-2, 2.05e-2, 1.01e-2, 4.60e-3, 1.80e-3, 6.71e-4, 2.0e-4];
+thllr = [2.5, 2.5, 2.4, 2.3, 2.1, 1.8, 1.4, 0.9];
 semilogy(dB, mmselimit, '-^', dB, zflimit, '-s', ...
-        dB, cell2Iter0Perf, '-d', dB, cell2Iter1Perf, '-*', dB, cell2Iter2Perf, '-h', 'LineWidth', 1.5);
+        dB, cell2Iter0Perf, '-d', dB, cell2Iter1Perf, '-*', dB, cell2Iter2Perf, '-h', ...
+        dB, cell2Iter2HardPerf, '-p', 'LineWidth', 1.5);
 legend('无干扰场景, MMSE', '无干扰场景, ZF', ...
-       '迭代次数为0', '迭代次数为1', '迭代次数为2');
+       '迭代次数为0', '迭代次数为1', '迭代次数为2', '部分硬判决');
 set(gca, 'XTick', -10 : 2 : 4);
 xlabel('SNR (dB)');
 ylabel('BER');
 axis([-10, 4, 1e-4, 1]);
 grid on;
-
 
 
 

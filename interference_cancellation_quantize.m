@@ -3,7 +3,7 @@ L = 2;
 M = 100;
 K = 100;
 SNRdB = 0;
-numCases = 100;
+numCases = 1000;
 
 SNR = 10^(SNRdB / 10);
 N0 = 1 / SNR;
@@ -37,6 +37,8 @@ berr = 0;
 serr = 0;
 xerrs = [];
 xmats = [];
+rhs = [];
+ehs = [];
 
 for ci = 1 : numCases
     UEs = brownian(L, K, BSs, r / sqrt(3));
@@ -49,7 +51,9 @@ for ci = 1 : numCases
 
     %xhat = pinv(H) * y;
     %xhat = H' / (H * H' + N0 * eye(M)) * y;
-    [xhat, Cx, xq] = iterative_cancellation_quantize(L, M, K, H, y, N0, 1);
+    [xhat, Cx, xq, rh, eh] = iterative_cancellation_quantize(L, M, K, H, y, N0, 2, x);
+    rhs = [rhs; rh];
+    ehs = [ehs; eh];
     for xi = 1 : length(xhat)
         if xq(xi) ~= x(xi)
             xerrs = [xerrs; xhat(xi)];
@@ -69,3 +73,7 @@ fprintf(2, 'BER is %e, with %d errors\n', berr / numCases / L / K / 2, berr);
 fprintf(2, 'SER is %e, with %d errors\n', serr / numCases / L / K, serr);
 
 plot(real(xmats), imag(xmats), '.', real(xerrs), imag(xerrs), 'x'); axis([-1.5 1.5 -1.5 1.5]); grid on;
+
+subplot(2, 1, 1); hist(rhs, 20);
+subplot(2, 1, 2); hist(ehs, 20);
+

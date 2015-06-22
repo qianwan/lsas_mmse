@@ -1,4 +1,4 @@
-function [x, Cx, xq] = iterative_cancellation_quantize(L, M, K, H, y, N0, n)
+function [x, Cx, xq, rh, eh] = iterative_cancellation_quantize(L, M, K, H, y, N0, n, realx)
     v = zeros(L * M, L);
     W = zeros(L * M, L * M);
     W0 = zeros(L * M, L * M);
@@ -50,16 +50,30 @@ function [x, Cx, xq] = iterative_cancellation_quantize(L, M, K, H, y, N0, n)
     x = zeros(L * K, 1);
     Cx = zeros(L * K, K);
     xq = zeros(L * K, 1);
+    rh = [];
+    eh = [];
     for p = 1 : L
         Hpp = H((p - 1) * M + 1 : p * M, (p - 1) * K + 1 : p * K);
         Up = U((p - 1) * M + 1 : p * M, :);
         yp = y((p - 1) * M + 1 : p * M) - sum(v((p - 1) * M + 1 : p * M, :), 2);
         x((p - 1) * K + 1 : p * K) = Hpp' / Up * yp;
+        Cx((p - 1) * K + 1 : p * K, :) = eye(K) - Hpp' / Up * Hpp;
         for k = 1 : K
             s = x((p - 1) * K + k);
             re = real(s);
             im = imag(s);
             xq((p - 1) * K + k) = sign(re) / sqrt(2) + sign(im) / sqrt(2) * 1j;
+            nom = exp(-abs(x((p - 1) * K + k) - xq((p - 1) * K + k))^2 / real(Cx((p - 1) * K + k, k)));
+            den = 0;
+            den = den + exp(-abs(x((p - 1) * K + k) - (+1/sqrt(2) + 1j/sqrt(2)))^2 / real(Cx((p - 1) * K + k, k)));
+            den = den + exp(-abs(x((p - 1) * K + k) - (+1/sqrt(2) - 1j/sqrt(2)))^2 / real(Cx((p - 1) * K + k, k)));
+            den = den + exp(-abs(x((p - 1) * K + k) - (-1/sqrt(2) - 1j/sqrt(2)))^2 / real(Cx((p - 1) * K + k, k)));
+            den = den + exp(-abs(x((p - 1) * K + k) - (-1/sqrt(2) + 1j/sqrt(2)))^2 / real(Cx((p - 1) * K + k, k)));
+            llr = log((nom / den) / (1 - nom / den));
+            if realx((p - 1) * K + k) == xq((p - 1) * K + k)
+                rh = [rh; llr];
+            else
+                eh = [eh; llr];
+            end
         end
-        Cx((p - 1) * K + 1 : p * K, :) = eye(K) - Hpp' / Up * Hpp;
     end

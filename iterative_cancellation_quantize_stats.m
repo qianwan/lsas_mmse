@@ -1,4 +1,4 @@
-function [x, Cx, xq, rh, eh] = iterative_cancellation_quantize(L, M, K, H, y, N0, n, realx)
+function [x, Cx, xq, rh, eh] = iterative_cancellation_quantize_stats(L, M, K, H, y, N0, n, realx)
     v = zeros(L * M, L);
     W = zeros(L * M, L * M);
     W0 = zeros(L * M, L * M);

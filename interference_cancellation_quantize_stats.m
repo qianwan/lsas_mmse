@@ -51,7 +51,7 @@ for ci = 1 : numCases
 
     %xhat = pinv(H) * y;
     %xhat = H' / (H * H' + N0 * eye(M)) * y;
-    [xhat, Cx, xq, rh, eh] = iterative_cancellation_quantize(L, M, K, H, y, N0, 2, x);
+    [xhat, Cx, xq, rh, eh] = iterative_cancellation_quantize_stats(L, M, K, H, y, N0, 2, x);
     rhs = [rhs; rh];
     ehs = [ehs; eh];
     for xi = 1 : length(xhat)
@@ -74,6 +74,6 @@ fprintf(2, 'SER is %e, with %d errors\n', serr / numCases / L / K, serr);
 
 plot(real(xmats), imag(xmats), '.', real(xerrs), imag(xerrs), 'x'); axis([-1.5 1.5 -1.5 1.5]); grid on;
 
-subplot(2, 1, 1); hist(rhs, 20);
-subplot(2, 1, 2); hist(ehs, 20);
+subplot(2, 1, 1); hist(rhs, 20); grid on; xlabel('产生正确硬判决结果的LLR分布');
+subplot(2, 1, 2); hist(ehs, 20); grid on; xlabel('产生错误硬判决结果的LLR分布');
 

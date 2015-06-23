@@ -4,6 +4,7 @@ M = 100;
 K = 100;
 SNRdB = 0;
 numCases = 100;
+T = 3;
 
 SNR = 10^(SNRdB / 10);
 N0 = 1 / SNR;
@@ -34,8 +35,8 @@ elseif L == 7
 end
 
 err = 0;
-simus = [];
-calcs = [];
+simus = zeros((T + 1) * L, numCases);
+calcs = zeros((T + 1) * L, numCases);
 
 for ci = 1 : numCases
     UEs = brownian(L, K, BSs, r / sqrt(3));
@@ -49,9 +50,9 @@ for ci = 1 : numCases
     %xhat = pinv(H) * y;
     %xhat = H' / (H * H' + N0 * eye(M)) * y;
 
-    [xhat, simu, calc] = iterative_cancellation_converge(L, M, K, H, y, N0, x, 3);
-    simus = [simus, simu];
-    calcs = [calcs, calc];
+    [xhat, simu, calc] = iterative_cancellation_converge(L, M, K, H, y, N0, x, T);
+    simus(:, ci) = simu;
+    calcs(:, ci) = calc;
 
     %[A, cost, main, cros] = pilot_assignment(L, M, K, R, N0);
     %[Hhat, C] = channel_estimate(L, M, K, H, R, A, N0);

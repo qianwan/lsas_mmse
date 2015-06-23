@@ -8,7 +8,8 @@ function UEs = brownian(L, K, BSs, outerRadius)
                 mx = abs(x);
                 my = abs(y);
                 valid = true;
-                if my > outerRadius * sin(pi / 3) || (sqrt(3) * mx + my > outerRadius * sqrt(3))
+                %if my > outerRadius * sin(pi / 3) || (sqrt(3) * mx + my > outerRadius * sqrt(3))
+                if my > outerRadius * sin(pi / 3) || mx > outerRadius || (mx > outerRadius / 2 && my > (outerRadius - mx) * sin(pi / 3))
                      valid = false;
                 end
                 if valid == true

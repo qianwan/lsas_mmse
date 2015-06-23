@@ -12,7 +12,6 @@ function [R, P] = generateReceiveCorrelation(L, M, K, BSs, UEs)
                 if p == q
                     P = P + ps * M;
                 end
-                tmp = randn(M, 1);
                 R((q - 1) * M + 1 : q * M, colOffset + 1 : colOffset + M) = ps * eye(M);
             end
         end

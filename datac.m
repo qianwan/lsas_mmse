@@ -36,6 +36,27 @@ ylabel('BER');
 axis([-10, 4, 1e-4, 1]);
 grid on;
 
+%% converge
+% L = 2, M = K = 100, perfect channel estimation
+asimu = [7.12, 7.12; 2.05, 2.05; 1.74, 1.74; 1.70, 1.71; 1.70, 1.70] - 1;
+acalc = [7.13, 7.12; 2.04, 2.05; 1.70, 1.72; 1.70, 1.70; 1.70, 1.70] - 1;
+asdb = 10 * log10(1 ./ asimu);
+acdb = 10 * log10(1 ./ acalc);
+xs  = [asdb(1, 1), asdb(2, 1), asdb(2, 1), asdb(4, 1), asdb(4, 1)];
+ys  = [asdb(1, 2), asdb(1, 2), asdb(3, 2), asdb(3, 2), asdb(5, 2)];
+xsp = [asdb(1, 1), asdb(1, 1), asdb(3, 1), asdb(3, 1), asdb(5, 1)];
+ysp = [asdb(1, 2), asdb(2, 2), asdb(2, 2), asdb(4, 2), asdb(4, 2)];
+
+xc  = [acdb(1, 1), acdb(2, 1), acdb(2, 1), acdb(4, 1), acdb(4, 1)];
+yc  = [acdb(1, 2), acdb(1, 2), acdb(3, 2), acdb(3, 2), acdb(5, 2)];
+xcp = [acdb(1, 1), acdb(1, 1), acdb(3, 1), acdb(3, 1), acdb(5, 1)];
+ycp = [acdb(1, 2), acdb(2, 2), acdb(2, 2), acdb(4, 2), acdb(4, 2)];
+
+plot(xs, ys, '-h', xsp, ysp, '-o', xc, yc, '-^', xcp, ycp, '-s', 'LineWidth', 1.5);
+grid on;
+legend('基站1，理论平均值', '基站2，理论平均值', '基站1，仿真数据', '基站2，仿真数据');
+xlabel('SIR (dB)');
+ylabel('SIR (dB)');
 
 
 % L = 7, M = 100

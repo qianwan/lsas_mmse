@@ -25,11 +25,12 @@ cell2Iter0Perf2    = [6.56e-2, 4.79e-2, 3.36e-2, 2.50e-2, 1.92e-2, 1.51e-2, 1.22
 cell2Iter1Perf     = [5.71e-2, 3.73e-2, 2.30e-2, 1.38e-2, 7.58e-3, 4.38e-3, 2.44e-3, 1.41e-3];
 cell2Iter2Perf     = [5.67e-2, 3.82e-2, 2.28e-2, 1.31e-2, 7.03e-3, 3.55e-3, 1.71e-3, 8.49e-4];
 cell2Iter0HardPerf = [5.84e-2, 3.82e-2, 2.25e-2, 1.26e-2, 6.95e-3, 3.83e-3, 2.34e-3, 1.92e-3];
-cell2Iter2HardPerf = [5.51e-2, 3.61e-2, 2.05e-2, 1.01e-2, 4.60e-3, 1.80e-3, 6.71e-4, 2.46e-4];
+cell2Iter1HardPerf = [5.47e-2, 3.36e-2, 1.98e-2, 9.74e-3, 4.41e-3, 1.77e-3, 6.99e-4, 2.83e-4];
+
 thllr2             = [2.5, 2.5, 2.4, 2.3, 2.1, 1.8, 1.4, 0.9];
 semilogy(dB, mmselimit, '-^', dB, zflimit, '-s', ...
-        dB, cell2Iter0Perf2, '-d', dB, cell2Iter1Perf, '-*', dB, cell2Iter0HardPerf, '-h', ...
-        dB, cell2Iter2HardPerf, '-p', 'LineWidth', 1.5);
+        dB, cell2Iter0Perf2, '-d', dB, cell2Iter1Perf, '-o', dB, cell2Iter0HardPerf, '-h', ...
+        dB, cell2Iter1HardPerf, '-p', 'LineWidth', 1.5);
 legend('无干扰场景, MMSE', '无干扰场景, ZF', ...
        '迭代0次', '迭代1次', '迭代0次，部分硬判1次', '迭代1次，部分硬判1次');
 set(gca, 'XTick', -10 : 2 : 4);
@@ -107,17 +108,22 @@ grid on;
 
 % K = 30, M = 40
 dB = [-8 : 2 : 2];
-oneCellImpR1= [1.01e-1, 6.30e-2, 3.48e-2, 1.53e-2, 5.42e-3, 1.21e-3];
-oneCellImpR2= [7.89e-2, 4.59e-2, 2.21e-2, 8.30e-3, 2.24e-3, 4.07e-4];
-oneCellImpR3= [6.91e-2, 3.81e-2, 1.78e-2, 6.78e-3, 1.56e-3, 2.61e-4];
-oneCellImp  = [7.81e-2, 4.50e-2, 2.19e-2, 8.39e-3, 2.44e-3, 3.55e-4];
-twoCellImp0 = [7.98e-2, 5.52e-2, 3.71e-2, 2.69e-2, 2.03e-2, 1.64e-2]; % L = 2, F = 1/2, # = 0
-twoCellImp1 = [6.87e-2, 3.99e-2, 1.94e-2, 8.43e-3, 2.46e-3, 4.88e-4]; % L = 2, F = 1/2, # = 1
-thrCellImp0 = [9.54e-2, 7.28e-2, 5.86e-2, 5.12e-2, 4.53e-2, 4.49e-2]; % L = 3, F = 1/3, # = 0
-thrCellImp1 = [7.36e-2, 4.43e-2, 2.40e-2, 1.05e-2, 4.42e-3, 1.21e-3]; % L = 3, F = 1/3, # = 1
-thrCellImp2 = [7.39e-2, 4.57e-2, 2.37e-2, 1.07e-2, 3.66e-3, 9.78e-4]; % L = 3, F = 1/3, # = 2
-forCellImp0 = [9.75e-2, 8.41e-2, 6.89e-2, 6.30e-2, 6.29e-2, 6.29e-2]; % L = 4, F = 1/4, # = 0
-forCellImp2 = [7.37e-2, 4.77e-2, 2.53e-2, 1.19e-2, 4.40e-3, 1.32e-3]; % L = 4, F = 1/4, # = 2
+oneCellImpR1 = [1.01e-1, 6.30e-2, 3.48e-2, 1.53e-2, 5.42e-3, 1.21e-3];
+oneCellImpR2 = [7.89e-2, 4.59e-2, 2.21e-2, 8.30e-3, 2.24e-3, 4.07e-4];
+oneCellImpR3 = [6.91e-2, 3.81e-2, 1.78e-2, 6.78e-3, 1.56e-3, 2.61e-4];
+oneCellImp   = [7.81e-2, 4.50e-2, 2.19e-2, 8.39e-3, 2.44e-3, 3.55e-4];
+
+twoCellImp0  = [7.98e-2, 5.52e-2, 3.71e-2, 2.69e-2, 2.03e-2, 1.64e-2]; % L = 2, F = 1/2, # = 0
+twoCellImp0g = [7.25e-2, 4.43e-2, 2.54e-2, 1.25e-2, 5.34e-3, 2.01e-3];
+
+twoCellImp1  = [6.87e-2, 3.99e-2, 1.94e-2, 8.43e-3, 2.46e-3, 4.88e-4]; % L = 2, F = 1/2, # = 1
+twoCellImp1PH= [6.83e-2, 3.87e-2, 1.79e-2, 6.76e-3, 1.73e-3, ]
+
+thrCellImp0  = [9.54e-2, 7.28e-2, 5.86e-2, 5.12e-2, 4.53e-2, 4.49e-2]; % L = 3, F = 1/3, # = 0
+thrCellImp1  = [7.36e-2, 4.43e-2, 2.40e-2, 1.05e-2, 4.42e-3, 1.21e-3]; % L = 3, F = 1/3, # = 1
+thrCellImp2  = [7.39e-2, 4.57e-2, 2.37e-2, 1.07e-2, 3.66e-3, 9.78e-4]; % L = 3, F = 1/3, # = 2
+forCellImp0  = [9.75e-2, 8.41e-2, 6.89e-2, 6.30e-2, 6.29e-2, 6.29e-2]; % L = 4, F = 1/4, # = 0
+forCellImp2  = [7.37e-2, 4.77e-2, 2.53e-2, 1.19e-2, 4.40e-3, 1.32e-3]; % L = 4, F = 1/4, # = 2
 semilogy(dB, oneCellImpR1, '-d', dB, oneCellImpR2, '-h', ...
          dB, twoCellImp0,  '-s', dB, twoCellImp1,  '->', ...
          dB, thrCellImp0,  '-o', dB, thrCellImp2,  '-v', ...

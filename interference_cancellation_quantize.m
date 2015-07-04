@@ -2,10 +2,10 @@ clear;
 L = 2;
 M = 100;
 K = 100;
-SNRdB = 2;
-numCases = 5000;
-T = 0;
-thllr = -10;
+SNRdB = 4;
+numCases = 1000;
+T = 2;
+thllr = 0.9;
 
 SNR = 10^(SNRdB / 10);
 N0 = 1 / SNR;

@@ -1,10 +1,11 @@
 clear;
 L = 2;
-M = 100;
-K = 100;
-SNRdB = 0;
-numCases = 500;
-T = 2;
+M = 40;
+K = 30;
+SNRdB = 2;
+numCases = 100000;
+T = 1;
+thllr = 0.7;
 
 SNR = 10^(SNRdB / 10);
 N0 = 1 / SNR;
@@ -63,8 +64,8 @@ for ci = 1 : numCases
 
     A = pilot_assignment_reuse(L, M, K, R, N0, F, ratio);
     [Hhat, C] = channel_estimate_reuse(L, M, K, H, R, A, N0, ratio);
-    Hhat = H; C = zeros(size(C));
-    xhat = iterative_cancellation_imperfect(L, M, K, Hhat, C, y, N0, T, 'mmse');
+    %Hhat = H; C = zeros(size(C));
+    xhat = iterative_cancellation_imperfect_quantize(L, M, K, Hhat, C, y, N0, T, thllr);
     err = err + sum(real(x) .* real(xhat) < 0) + sum(imag(x) .* imag(xhat) < 0);
 end
 

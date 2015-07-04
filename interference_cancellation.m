@@ -2,8 +2,9 @@ clear;
 L = 2;
 M = 100;
 K = 100;
-SNRdB = 0;
-numCases = 1000;
+SNRdB = -10;
+numCases = 200;
+T = 0;
 
 SNR = 10^(SNRdB / 10);
 N0 = 1 / SNR;
@@ -46,7 +47,7 @@ for ci = 1 : numCases
 
     %xhat = pinv(H) * y;
     %xhat = H' / (H * H' + N0 * eye(M)) * y;
-    xhat = iterative_cancellation(L, M, K, H, y, N0, 1);
+    xhat = iterative_cancellation(L, M, K, H, y, N0, T);
 
     %[A, cost, main, cros] = pilot_assignment(L, M, K, R, N0);
     %[Hhat, C] = channel_estimate(L, M, K, H, R, A, N0);
@@ -54,4 +55,4 @@ for ci = 1 : numCases
     err = err + sum(real(x) .* real(xhat) < 0) + sum(imag(x) .* imag(xhat) < 0);
 end
 
-fprintf(2, 'BER is %e\n', err / numCases / L / K / 2);
+fprintf(2, 'BER is %e, with %d errors\n', err / numCases / L / K / 2, err);

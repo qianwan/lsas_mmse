@@ -2,9 +2,9 @@ clear;
 L = 2;
 M = 100;
 K = 100;
-SNRdB = 0;
-numCases = 3000;
-T = 1;
+SNRdB = 2;
+numCases = 5000;
+T = 0;
 thllr = -10;
 
 SNR = 10^(SNRdB / 10);
@@ -48,7 +48,9 @@ for ci = 1 : numCases
 
     %xhat = pinv(H) * y;
     %xhat = H' / (H * H' + N0 * eye(M)) * y;
+
     [xhat, Cx, xq] = iterative_cancellation_quantize(L, M, K, H, y, N0, T, thllr);
+    %xhat = iterative_cancellation(L, M, K, H, y, N0, T);
 
     %[A, cost, main, cros] = pilot_assignment(L, M, K, R, N0);
     %[Hhat, C] = channel_estimate(L, M, K, H, R, A, N0);

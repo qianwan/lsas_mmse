@@ -21,25 +21,28 @@ zflimit   = [0.38, 0.359, 0.332, 0.298, 0.252, 0.206, 0.165, 0.139];
 % L = 2, M = K = 100, perfect channel estimation
 %cell2Iter0Perf   = [6.61e-2, 4.99e-2, 3.63e-2, 2.75e-2, 2.13e-2, 1.71e-2, 1.44e-2, 1.33e-2];
 cell2Iter0Perf     = [8.12e-2, 6.85e-2, 5.91e-2, 5.80e-2, 6.10e-2, 6.77e-2, 8.16e-2, 9.78e-2];
+cell2Iter0Perf2    = [6.56e-2, 4.79e-2, 3.36e-2, 2.50e-2, 1.92e-2, 1.51e-2, 1.22e-2, 1.03e-2];
 cell2Iter1Perf     = [5.71e-2, 3.73e-2, 2.30e-2, 1.38e-2, 7.58e-3, 4.38e-3, 2.44e-3, 1.41e-3];
 cell2Iter2Perf     = [5.67e-2, 3.82e-2, 2.28e-2, 1.31e-2, 7.03e-3, 3.55e-3, 1.71e-3, 8.49e-4];
+cell2Iter0HardPerf = [5.84e-2, 3.82e-2, 2.25e-2, 1.26e-2, 6.95e-3, 3.83e-3, 2.34e-3, 1.92e-3];
 cell2Iter2HardPerf = [5.51e-2, 3.61e-2, 2.05e-2, 1.01e-2, 4.60e-3, 1.80e-3, 6.71e-4, 2.46e-4];
 thllr2             = [2.5, 2.5, 2.4, 2.3, 2.1, 1.8, 1.4, 0.9];
 semilogy(dB, mmselimit, '-^', dB, zflimit, '-s', ...
-        dB, cell2Iter0Perf, '-d', dB, cell2Iter1Perf, '-*', dB, cell2Iter2Perf, '-h', ...
+        dB, cell2Iter0Perf2, '-d', dB, cell2Iter1Perf, '-*', dB, cell2Iter0HardPerf, '-h', ...
         dB, cell2Iter2HardPerf, '-p', 'LineWidth', 1.5);
 legend('无干扰场景, MMSE', '无干扰场景, ZF', ...
-       '不进行干扰消除', '迭代1次', '迭代2次', '迭代2次，部分硬判1次');
+       '迭代0次', '迭代1次', '迭代0次，部分硬判1次', '迭代1次，部分硬判1次');
 set(gca, 'XTick', -10 : 2 : 4);
 xlabel('SNR (dB)');
 ylabel('BER');
 axis([-10, 4, 1e-4, 1]);
 grid on;
 
+
 %% converge
 % L = 2, M = K = 100, perfect channel estimation
-asimu = [7.12, 7.12; 2.05, 2.05; 1.74, 1.74; 1.70, 1.71; 1.70, 1.70];
-acalc = [7.13, 7.12; 2.04, 2.05; 1.70, 1.72; 1.70, 1.70; 1.70, 1.70];
+asimu = [7.12, 7.12; 2.05, 2.05; 1.74, 1.74; 1.70, 1.71; 1.70, 1.70] - 1;
+acalc = [7.13, 7.12; 2.04, 2.05; 1.70, 1.72; 1.70, 1.70; 1.70, 1.70] - 1;
 asdb = 10 * log10(1 ./ asimu);
 acdb = 10 * log10(1 ./ acalc);
 xs  = [asdb(1, 1), asdb(2, 1), asdb(2, 1), asdb(4, 1), asdb(4, 1)];
@@ -54,7 +57,13 @@ ycp = [acdb(1, 2), acdb(2, 2), acdb(2, 2), acdb(4, 2), acdb(4, 2)];
 
 plot(xs, ys, '-h', xsp, ysp, '-o', xc, yc, '-^', xcp, ycp, '-s', 'LineWidth', 1.5);
 grid on;
-legend('基站1，理论平均值', '基站2，理论平均值', '基站1，仿真数据', '基站2，仿真数据');
+legend('基站1，理论平均值', '基站2，理论平均值', '基站1，仿真平均值', '基站2，仿真平均值');
+text('Interpreter', 'latex', 'String', '$t=0$', 'Position', [-7.7 -7.7]);
+text('Interpreter', 'latex', 'String', '$t=1$', 'Position', [-7.7 0]);
+text('Interpreter', 'latex', 'String', '$t=1$', 'Position', [0 -7.7]);
+text('Interpreter', 'latex', 'String', '$t=2$', 'Position', [-0.8 1.5]);
+text('Interpreter', 'latex', 'String', '$t=2$', 'Position', [1.2 -0.6]);
+text('Interpreter', 'latex', 'String', '$t=3$', 'Position', [1 0.9]);
 xlabel('SIR (dB)');
 ylabel('SIR (dB)');
 

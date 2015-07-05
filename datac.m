@@ -31,8 +31,8 @@ thllr2             = [2.5, 2.5, 2.4, 2.3, 2.1, 1.8, 1.4, 0.9];
 semilogy(dB, mmselimit, '-^', dB, zflimit, '-s', ...
         dB, cell2Iter0Perf2, '-d', dB, cell2Iter1Perf, '-o', dB, cell2Iter0HardPerf, '-h', ...
         dB, cell2Iter1HardPerf, '-p', 'LineWidth', 1.5);
-legend('无干扰场景, MMSE', '无干扰场景, ZF', ...
-       '迭代0次', '迭代1次', '迭代0次，部分硬判1次', '迭代1次，部分硬判1次');
+legend('无干扰场景,MMSE', '无干扰场景,ZF', ...
+       '迭代0次', '迭代1次', '迭代0次,部分硬判1次', '迭代1次,部分硬判1次');
 set(gca, 'XTick', -10 : 2 : 4);
 xlabel('SNR (dB)');
 ylabel('BER');
@@ -108,31 +108,34 @@ grid on;
 
 % K = 30, M = 40
 dB = [-8 : 2 : 2];
-oneCellImpR1 = [1.01e-1, 6.30e-2, 3.48e-2, 1.53e-2, 5.42e-3, 1.21e-3];
-oneCellImpR2 = [7.89e-2, 4.59e-2, 2.21e-2, 8.30e-3, 2.24e-3, 4.07e-4];
-oneCellImpR3 = [6.91e-2, 3.81e-2, 1.78e-2, 6.78e-3, 1.56e-3, 2.61e-4];
-oneCellImp   = [7.81e-2, 4.50e-2, 2.19e-2, 8.39e-3, 2.44e-3, 3.55e-4];
+oneCellImpR1  = [1.01e-1, 6.30e-2, 3.48e-2, 1.53e-2, 5.42e-3, 1.21e-3];
+oneCellImpR2  = [7.89e-2, 4.43e-2, 2.20e-2, 8.37e-3, 2.30e-3, 4.30e-4];
+oneCellImpR3  = [6.91e-2, 3.81e-2, 1.78e-2, 6.78e-3, 1.56e-3, 2.61e-4];
+oneCellImpR4  = [6.36e-2, 3.46e-2, 1.51e-2, 5.13e-3, 1.29e-3, 1.91e-4];
+oneCellImp    = [7.81e-2, 4.50e-2, 2.19e-2, 8.39e-3, 2.44e-3, 3.55e-4];
 
-twoCellImp0  = [7.98e-2, 5.52e-2, 3.71e-2, 2.69e-2, 2.03e-2, 1.64e-2]; % L = 2, F = 1/2, # = 0
-twoCellImp0g = [7.25e-2, 4.43e-2, 2.54e-2, 1.25e-2, 5.34e-3, 2.01e-3];
+twoCellImp0   = [7.25e-2, 4.43e-2, 2.54e-2, 1.25e-2, 5.34e-3, 2.01e-3]; % L = 2, F = 1/2, # = 0
 
-twoCellImp1  = [6.87e-2, 3.99e-2, 1.94e-2, 8.43e-3, 2.46e-3, 4.88e-4]; % L = 2, F = 1/2, # = 1
-twoCellImp1PH= [6.83e-2, 3.87e-2, 1.79e-2, 6.76e-3, 1.73e-3, ]
+twoCellImp1   = [6.87e-2, 3.99e-2, 1.94e-2, 8.43e-3, 2.46e-3, 4.88e-4]; % L = 2, F = 1/2, # = 1
+twoCellImp1PH = [6.83e-2, 3.87e-2, 1.79e-2, 6.76e-3, 1.73e-3, 3.14e-4];
 
-thrCellImp0  = [9.54e-2, 7.28e-2, 5.86e-2, 5.12e-2, 4.53e-2, 4.49e-2]; % L = 3, F = 1/3, # = 0
-thrCellImp1  = [7.36e-2, 4.43e-2, 2.40e-2, 1.05e-2, 4.42e-3, 1.21e-3]; % L = 3, F = 1/3, # = 1
-thrCellImp2  = [7.39e-2, 4.57e-2, 2.37e-2, 1.07e-2, 3.66e-3, 9.78e-4]; % L = 3, F = 1/3, # = 2
-forCellImp0  = [9.75e-2, 8.41e-2, 6.89e-2, 6.30e-2, 6.29e-2, 6.29e-2]; % L = 4, F = 1/4, # = 0
-forCellImp2  = [7.37e-2, 4.77e-2, 2.53e-2, 1.19e-2, 4.40e-3, 1.32e-3]; % L = 4, F = 1/4, # = 2
-semilogy(dB, oneCellImpR1, '-d', dB, oneCellImpR2, '-h', ...
-         dB, twoCellImp0,  '-s', dB, twoCellImp1,  '->', ...
-         dB, thrCellImp0,  '-o', dB, thrCellImp2,  '-v', ...
-         dB, forCellImp0,  '-p', dB, forCellImp2,  '-^', 'LineWidth', 1.5);
-legend('L = 1, F = 1', 'L = 1, F = 1/2', ...
-       'L = 2, F = 1/2, # = 0', 'L = 2, F = 1/2, # = 1', ...
-       'L = 3, F = 1/3, # = 0', 'L = 3, F = 1/3, # = 2', ...
-       'L = 4, F = 1/4, # = 0', 'L = 4, F = 1/4, # = 2');
-set(gca, 'XTick', -8 : 0.2 : 2);
+thrCellImp0   = [9.54e-2, 7.28e-2, 5.86e-2, 5.12e-2, 4.53e-2, 4.49e-2]; % L = 3, F = 1/3, # = 0
+thrCellImp1   = [7.36e-2, 4.43e-2, 2.40e-2, 1.05e-2, 4.42e-3, 1.21e-3]; % L = 3, F = 1/3, # = 1
+thrCellImp2   = [7.39e-2, 4.57e-2, 2.37e-2, 1.07e-2, 3.66e-3, 9.78e-4]; % L = 3, F = 1/3, # = 2
+
+forCellImp0   = [8.02e-2, 5.50e-2, 3.63e-2, 2.32e-2, 1.47e-2, 9.65e-3]; % L = 4, F = 1/4, # = 0
+forCellImp2   = [7.37e-2, 4.77e-2, 2.53e-2, 1.19e-2, 4.40e-3, 1.32e-3]; % L = 4, F = 1/4, # = 2
+%forCellImp1PH = [4.65e-4];
+forCellImp2PH = [7.13e-2, 4.15e-2, 2.00e-2, 7.81e-3, 2.17e-3, 4.35e-4];
+semilogy(dB, oneCellImpR2, '-h', ...
+         dB, twoCellImp0,  '-s', dB, twoCellImp1,  '->', dB, twoCellImp1PH, '-o', ...
+         dB, oneCellImpR4, '-d', ...
+         dB, forCellImp0,  '-p', dB, forCellImp2,  '-^', dB, forCellImp2PH, '-<', 'LineWidth', 1.5);
+legend('L=1,F=1/2', ...
+       'L=2,F=1/2,迭代0次', 'L=2,F=1/2,迭代1次', 'L=2,F=1/2,迭代1次,部分硬判1次', ...
+       'L=1,F=1/4', ...
+       'L=4,F=1/4,迭代0次', 'L=4,F=1/4,迭代2次', 'L=4,F=1/4,迭代2次,部分硬判1次');
+%set(gca, 'XTick', -8 : 0.2 : 2);
 xlabel('SNR (dB)');
 ylabel('BER');
 axis([-8 2 1e-4 1.1e-1]);
